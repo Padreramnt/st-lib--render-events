@@ -23,7 +23,7 @@
 	"license": "MIT",
 	"main": "lib/index.js",
 	"module": "lib/index.js",
-	"name": "@st-lib/render-htmlevents",
+	"name": "@st-lib/render-events",
 	"scripts": {
 		"build": "tsc -p ./tsconfig.json",
 		"prebuild": "rimraf -rf ./lib",
