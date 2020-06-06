@@ -1,0 +1,41 @@
+{
+	"dependencies": {
+		"@st-lib/events": "^1.0.1",
+		"rimraf": "^3.0.2",
+		"tslib": "^1.10.0"
+	},
+	"description": "@st-lib/render @st-lib/events bindings",
+	"devDependencies": {
+		"typescript": "^3.9.2"
+	},
+	"keywords": [
+		"st-lib",
+		"render",
+		"events"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Padreramnt/st-lib--render-events"
+	},
+	"files": [
+		"lib"
+	],
+	"license": "MIT",
+	"main": "lib/index.js",
+	"module": "lib/index.js",
+	"name": "@st-lib/render-htmlevents",
+	"scripts": {
+		"build": "tsc -p ./tsconfig.json",
+		"prebuild": "rimraf -rf ./lib",
+		"prepublishOnly": "npm run build",
+		"prestart": "rimraf -rf ./lib",
+		"start": "tsc -p ./tsconfig.json -w",
+		"start:tsc": "tsc",
+		"test": "tsc -p ./tsconfig.json --noEmit"
+	},
+	"types": "lib/index.d.ts",
+	"version": "1.0.0",
+	"peerDependencies": {
+		"@st-lib/render": "^1.0.3"
+	}
+}
