@@ -16,3 +16,23 @@ window.onload = () => {
 	})
 }
 ```
+
+```ts
+import { render, text } from '@st-lib/render'
+import { onDocumentScroll, onWindowResize } from '@st-lib/render-events'
+
+window.onload = () => {
+	render(document.body, () => {
+		onDocumentScroll(() => {
+			console.log(document.scrollTop)
+		}, true)
+
+		onWindowResize(() => {
+			console.log(window.innerWidth, window.innerHeight)
+		}, true)
+
+
+		text(null, 'lorem ipsum' /* ... */)
+	})
+}
+```
