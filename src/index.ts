@@ -2,9 +2,11 @@ import * as events from '@st-lib/events'
 import { linking } from '@st-lib/render'
 
 //#region events
-function define<A extends any[]>(createEventListener: (...args: A) => (element: EventTarget) => () => void) {
-	return (...args: A) => {
-		linking(createEventListener(...args))
+function define<E extends Event, O>(createEventListener: (listener: (event: E) => any, options?: O) => (target: EventTarget) => () => void) {
+	return function <R extends Element>(listener: (event: E & { currentTarget: R }) => any, options?: O) {
+		linking<R>(ref => (createEventListener(function (this: any, event: any) {
+			return listener.call(this, event)
+		}, options)(ref)))
 	}
 }
 
@@ -127,10 +129,139 @@ export const onWaitingForKey = define(events.createWaitingForKeyEventListener)
 export const onWheel = define(events.createWheelEventListener)
 //#endregion
 
+//#region document.body events
+function defineDocumentBodyEvent<E, O>(createEventListener: (listener: (event: E) => any, options?: O) => (target: EventTarget) => () => void) {
+	return function <R extends Element>(listener: (event: E & { currentTarget: HTMLBodyElement }, ref: R) => any, options?: O) {
+		linking<R>(ref => (createEventListener(function (this: any, event: any) {
+			return listener.call(this, event, ref)
+		}, options)(document.body)))
+	}
+}
+
+export const onDocumentBodyValueChange = defineDocumentBodyEvent(events.createValueChangeEventListener)
+export const onDocumentBodySvgUnload = defineDocumentBodyEvent(events.createSvgUnloadEventListener)
+export const onDocumentBodySvgZoom = defineDocumentBodyEvent(events.createSvgZoomEventListener)
+export const onDocumentBodyAbort = defineDocumentBodyEvent(events.createAbortEventListener)
+export const onDocumentBodyAfterPrint = defineDocumentBodyEvent(events.createAfterPrintEventListener)
+export const onDocumentBodyAnimationCancel = defineDocumentBodyEvent(events.createAnimationCancelEventListener)
+export const onDocumentBodyAnimationEnd = defineDocumentBodyEvent(events.createAnimationEndEventListener)
+export const onDocumentBodyAnimationIteration = defineDocumentBodyEvent(events.createAnimationIterationEventListener)
+export const onDocumentBodyAnimationStart = defineDocumentBodyEvent(events.createAnimationStartEventListener)
+export const onDocumentBodyAuxClick = defineDocumentBodyEvent(events.createAuxClickEventListener)
+export const onDocumentBodyBeforePrint = defineDocumentBodyEvent(events.createBeforePrintEventListener)
+export const onDocumentBodyBeforeUnload = defineDocumentBodyEvent(events.createBeforeUnloadEventListener)
+export const onDocumentBodyBlur = defineDocumentBodyEvent(events.createBlurEventListener)
+export const onDocumentBodyBounce = defineDocumentBodyEvent(events.createBounceEventListener)
+export const onDocumentBodyCancel = defineDocumentBodyEvent(events.createCancelEventListener)
+export const onDocumentBodyCanPlay = defineDocumentBodyEvent(events.createCanPlayEventListener)
+export const onDocumentBodyCanPlayThrough = defineDocumentBodyEvent(events.createCanPlayThroughEventListener)
+export const onDocumentBodyChange = defineDocumentBodyEvent(events.createChangeEventListener)
+export const onDocumentBodyClick = defineDocumentBodyEvent(events.createClickEventListener)
+export const onDocumentBodyClose = defineDocumentBodyEvent(events.createCloseEventListener)
+export const onDocumentBodyContextMenu = defineDocumentBodyEvent(events.createContextMenuEventListener)
+export const onDocumentBodyCopy = defineDocumentBodyEvent(events.createCopyEventListener)
+export const onDocumentBodyCueChange = defineDocumentBodyEvent(events.createCueChangeEventListener)
+export const onDocumentBodyCut = defineDocumentBodyEvent(events.createCutEventListener)
+export const onDocumentBodyDblClick = defineDocumentBodyEvent(events.createDblClickEventListener)
+export const onDocumentBodyDrag = defineDocumentBodyEvent(events.createDragEventListener)
+export const onDocumentBodyDragEnd = defineDocumentBodyEvent(events.createDragEndEventListener)
+export const onDocumentBodyDragEnter = defineDocumentBodyEvent(events.createDragEnterEventListener)
+export const onDocumentBodyDragExit = defineDocumentBodyEvent(events.createDragExitEventListener)
+export const onDocumentBodyDragLeave = defineDocumentBodyEvent(events.createDragLeaveEventListener)
+export const onDocumentBodyDragover = defineDocumentBodyEvent(events.createDragoverEventListener)
+export const onDocumentBodyDragStart = defineDocumentBodyEvent(events.createDragStartEventListener)
+export const onDocumentBodyDrop = defineDocumentBodyEvent(events.createDropEventListener)
+export const onDocumentBodyDurationChange = defineDocumentBodyEvent(events.createDurationChangeEventListener)
+export const onDocumentBodyEmptied = defineDocumentBodyEvent(events.createEmptiedEventListener)
+export const onDocumentBodyEncrypted = defineDocumentBodyEvent(events.createEncryptedEventListener)
+export const onDocumentBodyEnded = defineDocumentBodyEvent(events.createEndedEventListener)
+export const onDocumentBodyError = defineDocumentBodyEvent(events.createErrorEventListener)
+export const onDocumentBodyFinish = defineDocumentBodyEvent(events.createFinishEventListener)
+export const onDocumentBodyFocus = defineDocumentBodyEvent(events.createFocusEventListener)
+export const onDocumentBodyFocusIn = defineDocumentBodyEvent(events.createFocusInEventListener)
+export const onDocumentBodyFocusOut = defineDocumentBodyEvent(events.createFocusOutEventListener)
+export const onDocumentBodyFullscreenChange = defineDocumentBodyEvent(events.createFullscreenChangeEventListener)
+export const onDocumentBodyFullscreenError = defineDocumentBodyEvent(events.createFullscreenErrorEventListener)
+export const onDocumentBodyGotPointerCapture = defineDocumentBodyEvent(events.createGotPointerCaptureEventListener)
+export const onDocumentBodyHashChange = defineDocumentBodyEvent(events.createHashChangeEventListener)
+export const onDocumentBodyInput = defineDocumentBodyEvent(events.createInputEventListener)
+export const onDocumentBodyInvalid = defineDocumentBodyEvent(events.createInvalidEventListener)
+export const onDocumentBodyKeyDown = defineDocumentBodyEvent(events.createKeyDownEventListener)
+export const onDocumentBodyKeyPress = defineDocumentBodyEvent(events.createKeyPressEventListener)
+export const onDocumentBodyKeyUp = defineDocumentBodyEvent(events.createKeyUpEventListener)
+export const onDocumentBodyLanguageChange = defineDocumentBodyEvent(events.createLanguageChangeEventListener)
+export const onDocumentBodyLoad = defineDocumentBodyEvent(events.createLoadEventListener)
+export const onDocumentBodyLoadedData = defineDocumentBodyEvent(events.createLoadedDataEventListener)
+export const onDocumentBodyLoadedMetadata = defineDocumentBodyEvent(events.createLoadedMetadataEventListener)
+export const onDocumentBodyLoadStart = defineDocumentBodyEvent(events.createLoadStartEventListener)
+export const onDocumentBodyLostPointerCapture = defineDocumentBodyEvent(events.createLostPointerCaptureEventListener)
+export const onDocumentBodyMessage = defineDocumentBodyEvent(events.createMessageEventListener)
+export const onDocumentBodyMessageError = defineDocumentBodyEvent(events.createMessageErrorEventListener)
+export const onDocumentBodyMouseDown = defineDocumentBodyEvent(events.createMouseDownEventListener)
+export const onDocumentBodyMouseEnter = defineDocumentBodyEvent(events.createMouseEnterEventListener)
+export const onDocumentBodyMouseLeave = defineDocumentBodyEvent(events.createMouseLeaveEventListener)
+export const onDocumentBodyMouseMove = defineDocumentBodyEvent(events.createMouseMoveEventListener)
+export const onDocumentBodyMouseOut = defineDocumentBodyEvent(events.createMouseOutEventListener)
+export const onDocumentBodyMouseOver = defineDocumentBodyEvent(events.createMouseOverEventListener)
+export const onDocumentBodyMouseUp = defineDocumentBodyEvent(events.createMouseUpEventListener)
+export const onDocumentBodyOffline = defineDocumentBodyEvent(events.createOfflineEventListener)
+export const onDocumentBodyOnline = defineDocumentBodyEvent(events.createOnlineEventListener)
+export const onDocumentBodyOrientationChange = defineDocumentBodyEvent(events.createOrientationChangeEventListener)
+export const onDocumentBodyPageHide = defineDocumentBodyEvent(events.createPageHideEventListener)
+export const onDocumentBodyPageShow = defineDocumentBodyEvent(events.createPageShowEventListener)
+export const onDocumentBodyPaste = defineDocumentBodyEvent(events.createPasteEventListener)
+export const onDocumentBodyPause = defineDocumentBodyEvent(events.createPauseEventListener)
+export const onDocumentBodyPlay = defineDocumentBodyEvent(events.createPlayEventListener)
+export const onDocumentBodyPlaying = defineDocumentBodyEvent(events.createPlayingEventListener)
+export const onDocumentBodyPointerCancel = defineDocumentBodyEvent(events.createPointerCancelEventListener)
+export const onDocumentBodyPointerDown = defineDocumentBodyEvent(events.createPointerDownEventListener)
+export const onDocumentBodyPointerEnter = defineDocumentBodyEvent(events.createPointerEnterEventListener)
+export const onDocumentBodyPointerLeave = defineDocumentBodyEvent(events.createPointerLeaveEventListener)
+export const onDocumentBodyPointerMove = defineDocumentBodyEvent(events.createPointerMoveEventListener)
+export const onDocumentBodyPointerOut = defineDocumentBodyEvent(events.createPointerOutEventListener)
+export const onDocumentBodyPointerover = defineDocumentBodyEvent(events.createPointeroverEventListener)
+export const onDocumentBodyPointerUp = defineDocumentBodyEvent(events.createPointerUpEventListener)
+export const onDocumentBodyPopState = defineDocumentBodyEvent(events.createPopStateEventListener)
+export const onDocumentBodyProgress = defineDocumentBodyEvent(events.createProgressEventListener)
+export const onDocumentBodyRateChange = defineDocumentBodyEvent(events.createRateChangeEventListener)
+export const onDocumentBodyRejectionHandled = defineDocumentBodyEvent(events.createRejectionHandledEventListener)
+export const onDocumentBodyReset = defineDocumentBodyEvent(events.createResetEventListener)
+export const onDocumentBodyResize = defineDocumentBodyEvent(events.createResizeEventListener)
+export const onDocumentBodyScroll = defineDocumentBodyEvent(events.createScrollEventListener)
+export const onDocumentBodySecurityPolicyViolation = defineDocumentBodyEvent(events.createSecurityPolicyViolationEventListener)
+export const onDocumentBodySeeked = defineDocumentBodyEvent(events.createSeekedEventListener)
+export const onDocumentBodySeeking = defineDocumentBodyEvent(events.createSeekingEventListener)
+export const onDocumentBodySelect = defineDocumentBodyEvent(events.createSelectEventListener)
+export const onDocumentBodySelectionChange = defineDocumentBodyEvent(events.createSelectionChangeEventListener)
+export const onDocumentBodySelectStart = defineDocumentBodyEvent(events.createSelectStartEventListener)
+export const onDocumentBodyStalled = defineDocumentBodyEvent(events.createStalledEventListener)
+export const onDocumentBodyStart = defineDocumentBodyEvent(events.createStartEventListener)
+export const onDocumentBodyStorage = defineDocumentBodyEvent(events.createStorageEventListener)
+export const onDocumentBodySubmit = defineDocumentBodyEvent(events.createSubmitEventListener)
+export const onDocumentBodySuspend = defineDocumentBodyEvent(events.createSuspendEventListener)
+export const onDocumentBodyTimeupdate = defineDocumentBodyEvent(events.createTimeupdateEventListener)
+export const onDocumentBodyToggle = defineDocumentBodyEvent(events.createToggleEventListener)
+export const onDocumentBodyTouchCancel = defineDocumentBodyEvent(events.createTouchCancelEventListener)
+export const onDocumentBodyTouchEnd = defineDocumentBodyEvent(events.createTouchEndEventListener)
+export const onDocumentBodyTouchMove = defineDocumentBodyEvent(events.createTouchMoveEventListener)
+export const onDocumentBodyTouchStart = defineDocumentBodyEvent(events.createTouchStartEventListener)
+export const onDocumentBodyTransitionCancel = defineDocumentBodyEvent(events.createTransitionCancelEventListener)
+export const onDocumentBodyTransitionEnd = defineDocumentBodyEvent(events.createTransitionEndEventListener)
+export const onDocumentBodyTransitionRun = defineDocumentBodyEvent(events.createTransitionRunEventListener)
+export const onDocumentBodyTransitionStart = defineDocumentBodyEvent(events.createTransitionStartEventListener)
+export const onDocumentBodyUnhandledRejection = defineDocumentBodyEvent(events.createUnhandledRejectionEventListener)
+export const onDocumentBodyUnload = defineDocumentBodyEvent(events.createUnloadEventListener)
+export const onDocumentBodyVolumeChange = defineDocumentBodyEvent(events.createVolumeChangeEventListener)
+export const onDocumentBodyWaiting = defineDocumentBodyEvent(events.createWaitingEventListener)
+export const onDocumentBodyWaitingForKey = defineDocumentBodyEvent(events.createWaitingForKeyEventListener)
+export const onDocumentBodyWheel = defineDocumentBodyEvent(events.createWheelEventListener)
+//#endregion
+
+
 //#region document events
 function defineDocumentEvent<E, O>(createEventListener: (listener: (event: E) => any, options?: O) => (target: EventTarget) => () => void) {
-	return function <R extends Element>(listener: (event: E, ref: R) => any, options?: O) {
-		linking<R>(ref => (createEventListener(function (this: any, event) {
+	return function <R extends Element>(listener: (event: E & { currentTarget: Document }, ref: R) => any, options?: O) {
+		linking<R>(ref => (createEventListener(function (this: any, event: any) {
 			return listener.call(this, event, ref)
 		}, options)(document)))
 	}
@@ -257,8 +388,8 @@ export const onDocumentWheel = defineDocumentEvent(events.createWheelEventListen
 
 //#region window events
 function defineWindowEvent<E, O>(createEventListener: (listener: (event: E) => any, options?: O) => (target: EventTarget) => () => void) {
-	return function <R extends Element>(listener: (event: E, ref: R) => any, options?: O) {
-		linking<R>(ref => (createEventListener(function (this: any, event) {
+	return function <R extends Element>(listener: (event: E & { currentTarget: Window }, ref: R) => any, options?: O) {
+		linking<R>(ref => (createEventListener(function (this: any, event: any) {
 			return listener.call(this, event, ref)
 		}, options)(window)))
 	}
